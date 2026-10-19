@@ -227,6 +227,8 @@ export function InkSvgCanvas(props: InkSvgCanvasProps): React.JSX.Element {
 	onInteractionChangeRef.current = props.onInteractionChange;
 	const onEmbedUndoStackPushRef = useRef(props.onEmbedUndoStackPush);
 	onEmbedUndoStackPushRef.current = props.onEmbedUndoStackPush;
+	const onPageHeightChangeRef = useRef(props.onPageHeightChange);
+	onPageHeightChangeRef.current = props.onPageHeightChange;
 	const setGridEnabledHandlerRef = useRef<(enabled: boolean) => void>(() => {});
 	setGridEnabledHandlerRef.current = (enabled: boolean) => {
 		gridEnabledRef.current = enabled;
@@ -379,7 +381,7 @@ export function InkSvgCanvas(props: InkSvgCanvasProps): React.JSX.Element {
 			// Only invalidate cache entries touched by this mutation.
 			invalidateStrokeCaches(change);
 			forceRender(n => n + 1);
-			props.onChange?.();
+			onChangeRef.current?.();
 
 			if (writingMode) {
 				if (change.type === 'add' || change.type === 'addMany') {
@@ -401,7 +403,7 @@ export function InkSvgCanvas(props: InkSvgCanvasProps): React.JSX.Element {
 					writingBufferLines,
 					lh,
 				);
-				props.onPageHeightChange?.(candidateHeight);
+				onPageHeightChangeRef.current?.(candidateHeight);
 			}
 		});
 		const unsubUndo = undoManagerRef.current.subscribe((event) => {
